@@ -1,18 +1,45 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <top-search v-model="query" @submit="submit"></top-search>
+    <list :list="list"></list>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { LIST_KEY } from '@/assets/js/constant';
+import List from '@/components/list/list.vue';
+import { computed, defineComponent, ref } from 'vue';
+import { useStore } from 'vuex'
+import TopSearch from '../components/top-search/top-search.vue';
 
-@Options({
+
+export default defineComponent({
+  name: 'Home',
   components: {
-    HelloWorld,
+    TopSearch,
+    List  
   },
-})
-export default class HomeView extends Vue {}
+  setup(){
+    const query = ref("")
+    const store = useStore()
+    const list = computed(() => store.state.list)
+    console.log("list:",list);
+    const submit = () => {
+      console.log('submit:');
+      console.log('query:',query.value);
+      const clist = list.value.slice()
+      clist.push(query.value)
+      
+      store.dispatch('addItem', clist)
+
+      localStorage.setItem(LIST_KEY,JSON.stringify(clist))
+    }
+    return{
+      query,
+      submit,
+      list
+    }
+  }
+  
+});
 </script>
