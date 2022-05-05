@@ -1,13 +1,16 @@
 <template>
   <div class="search">
-    <input type="text" :placeholder="placeholder" v-model="query" />
-    <input type="submit" value="提交" @click="submit">
+    <van-search v-model="query" placeholder="请输入搜索关键词" />
+    <!-- <input type="text" :placeholder="placeholder" v-model="query" /> -->
+    <!-- <input type="submit" value="提交" @click="submit">
+    <van-button type="primary">主要按钮</van-button> -->
   </div>
 </template>
 
 <script>
 // import { ref } from '@vue/reactivity';
 import useSearch from './use-search';
+
 export default {
   name: "TopSearch",
   props: {
@@ -32,4 +35,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.search{
+  margin-bottom:20px
+}
+</style>
