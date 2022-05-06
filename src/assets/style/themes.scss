@@ -1,0 +1,22 @@
+$themes: (
+  light: (
+    color-home-bg: rgb(194, 174, 174),
+    color-blue: #4343e4,
+    color-gird-bg: #fff,
+    color-text: #fff,
+    color-text-d: rgba(255, 255, 255, 0.3),
+    color-text-l: rgba(255, 255, 255, 0.5),
+    color-text-ll: rgba(255, 255, 255, 0.8),
+  ),
+  dark: (
+    color-home-bg: #000,
+    color-blue: #4343e4,
+    color-gird-bg: rgb(81, 71, 71),
+    color-text: #000,
+    color-text-d: rgba(255, 255, 255, 0.3),
+    color-text-l: rgba(255, 255, 255, 0.5),
+    color-text-ll: rgba(255, 255, 255, 0.8),
+  ),
+);
+
+

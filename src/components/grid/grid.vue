@@ -1,5 +1,5 @@
 <template>
-  <van-grid :gutter="10" :column-num="1" clickable >
+  <van-grid :gutter="10" :column-num="1" clickable class="grid-wrap" >
     <van-grid-item v-for="value in girdList" :key="value.icon">
       <div class="grid-item">
         <div class="grid-icon">
@@ -53,11 +53,15 @@ export default {
 </script>
 
 <style lang="scss">
+.grid-wrap{
+	--van-border-color:#000;
+}
 .grid-item{
 	flex: 1;
 	display: flex;
 	width: 100%;
 	height: 100%;
+
 	.grid-icon{
 		flex: 0 1 50%;
 		display: flex;
