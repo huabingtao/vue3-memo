@@ -4,12 +4,14 @@
       <div class="grid-item">
         <div class="grid-icon">
           <slot name="icon">
-            <svg class="icon svg-icon" aria-hidden="true">
+            <div class="grid-icon-content">
+              <svg class="icon svg-icon" aria-hidden="true">
               <use :xlink:href="`#${value.icon}`"></use>
             </svg>
+            </div>
           </slot>
-          <slot name="text">
-            {{ value.title }}
+          <slot name="text" >
+            <span class="grid-item-title">{{ value.title }}</span>
           </slot>
         </div>
         <div class="grid-count">{{ value.count }}</div>
@@ -53,8 +55,37 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/style/minxin.scss";
+.van-grid-item__content{
+  @include background_color("color-gird-bg")
+}
 .grid-wrap{
-	--van-border-color:#000;
+	--van-border-color: transparent;
+  .van-grid-item{
+    .grid-icon-content{
+      margin-bottom: 4px;
+    }
+    &:nth-child(1){
+      .grid-icon-content{
+        background: #7163e3;
+      }
+    }
+    &:nth-child(2){
+      .grid-icon-content{
+        background: #ff4d4d59;
+      }
+    }
+    &:nth-child(3){
+      .grid-icon-content{
+        background: #b7994085;
+      }
+    }
+    &:nth-child(4){
+      .grid-icon-content{
+        background: #ed9a35;
+      }
+    }
+  }
 }
 .grid-item{
 	flex: 1;
@@ -70,13 +101,27 @@ export default {
 		.icon{
 			font-size: 2.4rem;
 		}
+    .grid-icon-content{
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 	}
+  .grid-item-title{
+    @include font_color("color-text")
+  }
 	.grid-count{
 		flex: 0 1 50%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 1.4rem;
+		font-size: 1.6rem;
+    font-weight: bold;
+    @include font_color("color-count")
 	}
 }
 

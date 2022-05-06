@@ -14,6 +14,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/style/minxin.scss";
 .btn {
   position: absolute;
   left: 10px;
@@ -21,6 +22,7 @@ export default {};
   height: 32px;
 	display: flex;
 	align-items: center;
+  @include font_color("color-blue");
 	.btn-icon{
 		width: 32px;
 		height: 32px;

@@ -24,7 +24,6 @@ export default {
   setup(props,{emit}) {
     const { query } = useSearch(props,emit);
 		const submit = () => {
-      console.log(11111);
 			emit('submit')
 		}
     return {
@@ -36,7 +35,24 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/style/minxin.scss";
 .search{
-  margin-bottom:20px
+  margin-bottom:20px;
+  .van-field__control{
+    @include font_color("color-search-text");
+  }
+  .van-field__left-icon .van-icon{
+    @include font_color("color-search-icon");
+  }
+  .van-search{
+    @include background_color("color-home-bg");
+  }
+  .van-search__content{
+    @include background_color("color-search-bg");
+  }
+  input::-webkit-input-placeholder { /* WebKit browsers 适配谷歌 */
+    @include font_color("color-search-placeholder");
+  }
 }
+
 </style>

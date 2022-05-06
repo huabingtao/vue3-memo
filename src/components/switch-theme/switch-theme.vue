@@ -1,7 +1,8 @@
 <template>
   <div class="them">
     <svg @click="toggleThem" class="icon svg-icon" aria-hidden="true">
-      <use xlink:href="#icon-moon"></use>
+      <use v-show="theme === 'light'" xlink:href="#icon-sun"></use>
+      <use v-show="theme === 'dark'" xlink:href="#icon-moon"></use>
     </svg>
   </div>
 </template>
@@ -14,8 +15,11 @@ const themes = {
 export default {
   data() {
     return {
-			theme: "light"   
+			theme: "light"
     };
+  },
+  created(){
+    this.toggleThem()
   },
 	methods:{
 		toggleThem(){
@@ -35,10 +39,6 @@ export default {
 @import "@/assets/style/minxin.scss";
 .them {
   text-align: right;
-  padding: 10px 10px 0 0;
-	span{
-		font-size: 18px;
-		@include font_color("color-home-bg");
-	}
+  padding-right: 10px;
 }
 </style>

@@ -1,0 +1,18 @@
+@import "@/assets/style/minxin.scss";
+ 
+body, html {
+    line-height: 1;
+    font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback';
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 100vh;
+    width: 100%;
+    @include background_color("color-home-bg");     
+}
+.icon {
+    width: 2rem;
+    height: 2rem;
+    vertical-align: -0.15rem;
+    fill: currentColor;
+    overflow: hidden;
+}
