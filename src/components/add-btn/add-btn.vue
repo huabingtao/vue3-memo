@@ -1,5 +1,5 @@
 <template>
-  <div class="btn">
+  <div class="btn" @click="onClick">
     <div class="btn-icon">
       <svg class="icon svg-icon" aria-hidden="true">
         <use xlink:href="#icon-add"></use>
@@ -10,7 +10,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods:{
+    onClick(){
+      this.$emit('onClick')
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -22,7 +28,7 @@ export default {};
   height: 32px;
 	display: flex;
 	align-items: center;
-  @include font_color("color-blue");
+  @include color("color-blue");
 	.btn-icon{
 		width: 32px;
 		height: 32px;

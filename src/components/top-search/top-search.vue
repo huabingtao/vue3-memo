@@ -39,10 +39,11 @@ export default {
 .search{
   margin-bottom:20px;
   .van-field__control{
-    @include font_color("color-search-text");
+    @include caret_color("color-caret");
+    @include color("color-search-text");
   }
   .van-field__left-icon .van-icon{
-    @include font_color("color-search-icon");
+    @include color("color-search-icon");
   }
   .van-search{
     @include background_color("color-home-bg");
@@ -51,7 +52,7 @@ export default {
     @include background_color("color-search-bg");
   }
   input::-webkit-input-placeholder { /* WebKit browsers 适配谷歌 */
-    @include font_color("color-search-placeholder");
+    @include color("color-search-placeholder");
   }
 }
 

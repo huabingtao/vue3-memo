@@ -57,13 +57,14 @@ export default {
 <style lang="scss">
 @import "@/assets/style/minxin.scss";
 .van-grid-item__content{
+  padding: 16px 8px;
   @include background_color("color-gird-bg")
 }
 .grid-wrap{
 	--van-border-color: transparent;
   .van-grid-item{
     .grid-icon-content{
-      margin-bottom: 4px;
+      margin-bottom: 14px;
     }
     &:nth-child(1){
       .grid-icon-content{
@@ -112,7 +113,7 @@ export default {
     }
 	}
   .grid-item-title{
-    @include font_color("color-text")
+    @include color("color-text")
   }
 	.grid-count{
 		flex: 0 1 50%;
@@ -121,7 +122,7 @@ export default {
 		justify-content: center;
 		font-size: 1.6rem;
     font-weight: bold;
-    @include font_color("color-count")
+    @include color("color-count")
 	}
 }
 

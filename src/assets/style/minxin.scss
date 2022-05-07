@@ -26,12 +26,13 @@
   }
 }
 
-//获取字体颜色
-@mixin font_color($color) {
+//获取颜色
+@mixin color($color) {
   @include themeify {
     color: themed($color) !important;
   }
 }
+
 
 //获取边框颜色
 @mixin border_color($color) {
@@ -39,3 +40,11 @@
     border-color: themed($color) !important;
   }
 }
+
+// 获取光标颜色
+@mixin caret_color($color) {
+  @include themeify {
+    caret-color: themed($color) !important;
+  }
+}
+
