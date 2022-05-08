@@ -10,14 +10,14 @@
       <div class="create-head">
         <div class="cancel" @click="toggleCreateModal">取消</div>
         <div class="title">新建事项</div>
-        <div class="add">添加</div>
+        <div class="add" :class="submitBtnClass" @click="onSubmit">添加</div>
       </div>
       <div class="create-field">
         <van-cell-group inset>
-          <van-field class="create-input" v-model="title" placeholder="标题" />
+          <van-field class="create-input" v-model.trim="formData.title" placeholder="标题" />
           <van-field
             class="create-input"
-            v-model="remark"
+            v-model.trim="formData.description"
             rows="5"
             autosize
             type="textarea"
@@ -25,8 +25,20 @@
             show-word-limit
           />
         </van-cell-group>
-        <!-- <div class="field-title"></div>
-      <dic class="field-remark"></dic> -->
+      </div>
+      <div class="create-favorite">
+        <van-cell-group inset>
+          <van-cell center title="旗标">
+            <template #icon>
+              <svg class="icon svg-icon" aria-hidden="true">
+                <use xlink:href="#icon-flag"></use>
+              </svg>
+            </template>
+            <template #right-icon>
+              <van-switch v-model="formData.isFavorite" size="24" />
+            </template>
+          </van-cell>
+        </van-cell-group>
       </div>
     </div>
   </van-popup>
@@ -34,12 +46,13 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import useCreate from './use-create'
 export default {
   data() {
     return {
       title: "",
       remark: "",
-      sss: true,
+      isFavorite: false,
     };
   },
   setup() {
@@ -55,12 +68,18 @@ export default {
     const hidden = () => {
       visible.value = false;
     };
+
+    const {formData, submitBtnClass, onSubmit} = useCreate(hidden)
+
     // defineExpose({visible,show,hidden,toggleCreateModal})
     return {
+      formData,
       visible,
       show,
       hidden,
       toggleCreateModal,
+      onSubmit,
+      submitBtnClass
     };
   },
 };
@@ -72,6 +91,14 @@ export default {
   height: 100%;
   @include background_color("color-create-bg");
   padding: 0 20px;
+  .create-field {
+    margin-bottom: 1.2rem;
+  }
+  .create-favorite {
+    .van-cell {
+      @include color("color-search-placeholder");
+    }
+  }
   .create-input {
     .van-field__control {
       @include caret_color("color-caret");
@@ -101,6 +128,9 @@ export default {
     .add {
       @include color("color-create-text-d");
       font-size: 1.1rem;
+      &.is-active{
+        @include color("color-blue");
+      }
     }
   }
   .van-cell-group--inset {

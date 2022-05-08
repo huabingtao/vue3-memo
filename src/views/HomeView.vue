@@ -38,20 +38,15 @@ export default defineComponent({
     const query = ref("")
     const createRef = ref(null)
     const store = useStore()
-    const list = computed(() => store.state.list)
-    console.log("list:",list);
+    const todolist = computed(() => store.state.todolist)
+    console.log("todolist:",todolist);
     const submit = () => {
       console.log('submit:');
-      console.log('query:',query.value);
-      const clist = list.value.slice()
-      clist.push(query.value)
 
-      store.dispatch('addItem', clist)
-
-      localStorage.setItem(LIST_KEY,JSON.stringify(clist))
     }
 
     const openCreateView = () => {
+
       //@ts-ignore
       createRef?.value?.show()
     }
@@ -60,7 +55,7 @@ export default defineComponent({
       query,
       submit,
       openCreateView,
-      list
+      todolist
     }
   }
 
