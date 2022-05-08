@@ -36,8 +36,8 @@ export default {
     const finishlist = computed(() => store.state.finishlist);
 
     const calcuFavoriteCount = () => {
-      const arr1 = todolist.value.filter((item) => item.favorite);
-      const arr2 = finishlist.value.filter((item) => item.favorite);
+      const arr1 = todolist.value.filter((item) => item.isFavorite);
+      const arr2 = finishlist.value.filter((item) => item.isFavorite);
 
       return arr1.length + arr2.length;
     };
