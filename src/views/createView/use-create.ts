@@ -2,7 +2,7 @@ import { TODO_KEY } from '@/assets/js/constant';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex'
 
-interface formDataType {
+export interface formDataType {
   title:string,
   description:string,
   isFavorite: boolean,

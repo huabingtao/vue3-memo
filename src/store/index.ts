@@ -1,18 +1,19 @@
+import { formDataType } from '@/views/createView/use-create';
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 import { FINISH_KEY, LIST_KEY, TODO_KEY, TRASH_KEY } from '../assets/js/constant';
 
 // 为 store state 声明类型
 export interface State {
-  list: string[],
-  todolist: string[],
-  finishlist: string[],
-  trashlist: string[],
+  list: formDataType[],
+  todolist: formDataType[],
+  finishlist: formDataType[],
+  trashlist: formDataType[],
 }
 // 定义 injection key
 export const key: InjectionKey<Store<State>> = Symbol()
 
-export default createStore<State>({
+export const store = createStore<State>({
   state: {
     list: JSON.parse(localStorage.getItem(LIST_KEY) || "[]"),
     todolist: JSON.parse(localStorage.getItem(TODO_KEY) || "[]"),

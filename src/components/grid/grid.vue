@@ -1,28 +1,38 @@
 <template>
   <van-grid :gutter="10" :column-num="1" clickable class="grid-wrap">
-    <van-grid-item v-for="value in gridList" :key="value.icon">
-      <div class="grid-item">
+    <van-grid-item v-for="grid in gridList" :key="grid.icon">
+      <div class="grid-item" @click="onClickGirdItem">
         <div class="grid-icon">
           <slot name="icon">
             <div class="grid-icon-content">
               <svg class="icon svg-icon" aria-hidden="true">
-                <use :xlink:href="`#${value.icon}`"></use>
+                <use :xlink:href="`#${grid.icon}`"></use>
               </svg>
             </div>
           </slot>
           <slot name="text">
-            <span class="grid-item-title">{{ value.title }}</span>
+            <span class="grid-item-title">{{ grid.title }}</span>
           </slot>
         </div>
-        <div class="grid-count">{{ value.count }}</div>
+        <div class="grid-count">{{ grid.count }}</div>
       </div>
     </van-grid-item>
   </van-grid>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import { key } from '@/store';
+
+
+enum TodoStatus {
+  Todo,
+  Finish,
+  All,
+  Flag
+}
+
 export default {
   name: "Grid",
   data() {
@@ -31,39 +41,46 @@ export default {
     };
   },
   setup() {
-    const store = useStore();
+    const store = useStore(key);
     const todolist = computed(() => store.state.todolist);
     const finishlist = computed(() => store.state.finishlist);
 
     const calcuFavoriteCount = () => {
       const arr1 = todolist.value.filter((item) => item.isFavorite);
       const arr2 = finishlist.value.filter((item) => item.isFavorite);
-
       return arr1.length + arr2.length;
     };
 
     const gridList = ref([
       {
         title: "待办",
+        status: TodoStatus.Todo,
         icon: "icon-todo",
         count: todolist.value.length,
       },
       {
         title: "已完成",
+        status: TodoStatus.Finish,
         icon: "icon-done",
         count: finishlist.value.length,
       },
       {
         title: "全部",
         icon: "icon-all",
+        status: TodoStatus.All,
         count: todolist.value.length + finishlist.value.length,
       },
       {
         title: "旗标",
+        status: TodoStatus.Flag,
         icon: "icon-flag",
         count: calcuFavoriteCount(),
       },
     ]);
+
+    const onClickGirdItem = () => {
+
+    }
 
     return {
       gridList,
