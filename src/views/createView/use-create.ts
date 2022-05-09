@@ -1,3 +1,4 @@
+import { key } from './../../store/index';
 import { TODO_KEY } from '@/assets/js/constant';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex'
@@ -21,6 +22,10 @@ export default function useCreate(hidden:()=> void){
 
   let submitBtnClass = ref('')
 
+  const createRef = ref(null)
+
+  const store = useStore(key)
+
   const todolist = computed(() => store.state.todolist)
 
   watch(()=>formData.value.title,(newTitle)=>{
@@ -31,7 +36,7 @@ export default function useCreate(hidden:()=> void){
     }
   })
 
-  const store = useStore()
+
 
   const clearForm = () => {
     formData.value = {
@@ -61,9 +66,11 @@ export default function useCreate(hidden:()=> void){
     hidden()
   }
 
+
   return {
     formData,
     submitBtnClass,
     onSubmit,
+    createRef
   }
 }

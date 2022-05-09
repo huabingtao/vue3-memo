@@ -56,7 +56,7 @@ export default {
     };
   },
   setup() {
-    const visible = ref(true);
+    const visible = ref(false);
     const toggleCreateModal = () => {
       visible.value = !visible.value;
     };

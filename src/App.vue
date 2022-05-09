@@ -5,7 +5,4 @@
 <style lang="scss">
 
 
-
-
-
 </style>

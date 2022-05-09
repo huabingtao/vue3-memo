@@ -1,7 +1,7 @@
 <template>
   <van-grid :gutter="10" :column-num="1" clickable class="grid-wrap">
     <van-grid-item v-for="grid in gridList" :key="grid.icon">
-      <div class="grid-item" @click="onClickGirdItem">
+      <div class="grid-item" @click="onClickGirdItem(grid.status)">
         <div class="grid-icon">
           <slot name="icon">
             <div class="grid-icon-content">
@@ -20,73 +20,53 @@
   </van-grid>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
-import { key } from '@/store';
+import { key } from "@/store";
+import { TodoStatus } from '@/assets/js/enum'
 
-
-enum TodoStatus {
-  Todo,
-  Finish,
-  All,
-  Flag
-}
-
-export default {
-  name: "Grid",
-  data() {
-    return {
-
-    };
-  },
-  setup() {
-    const store = useStore(key);
-    const todolist = computed(() => store.state.todolist);
-    const finishlist = computed(() => store.state.finishlist);
-
-    const calcuFavoriteCount = () => {
-      const arr1 = todolist.value.filter((item) => item.isFavorite);
-      const arr2 = finishlist.value.filter((item) => item.isFavorite);
-      return arr1.length + arr2.length;
-    };
-
-    const gridList = ref([
-      {
-        title: "待办",
-        status: TodoStatus.Todo,
-        icon: "icon-todo",
-        count: todolist.value.length,
-      },
-      {
-        title: "已完成",
-        status: TodoStatus.Finish,
-        icon: "icon-done",
-        count: finishlist.value.length,
-      },
-      {
-        title: "全部",
-        icon: "icon-all",
-        status: TodoStatus.All,
-        count: todolist.value.length + finishlist.value.length,
-      },
-      {
-        title: "旗标",
-        status: TodoStatus.Flag,
-        icon: "icon-flag",
-        count: calcuFavoriteCount(),
-      },
-    ]);
-
-    const onClickGirdItem = () => {
-
-    }
-
-    return {
-      gridList,
-    };
-  },
+const store = useStore(key);
+const todolist = computed(() => store.state.todolist);
+const finishlist = computed(() => store.state.finishlist);
+const emit = defineEmits<{ (e: "onClick"): void }>();
+const calcuFavoriteCount = () => {
+  const arr1 = todolist.value.filter((item) => item.isFavorite);
+  const arr2 = finishlist.value.filter((item) => item.isFavorite);
+  return arr1.length + arr2.length;
 };
+
+const gridList = ref([
+  {
+    title: "待办",
+    status: TodoStatus.Todo,
+    icon: "icon-todo",
+    count: todolist.value.length,
+  },
+  {
+    title: "已完成",
+    status: TodoStatus.Finish,
+    icon: "icon-done",
+    count: finishlist.value.length,
+  },
+  {
+    title: "全部",
+    icon: "icon-all",
+    status: TodoStatus.All,
+    count: todolist.value.length + finishlist.value.length,
+  },
+  {
+    title: "旗标",
+    status: TodoStatus.Flag,
+    icon: "icon-flag",
+    count: calcuFavoriteCount(),
+  },
+]);
+
+const onClickGirdItem = (status) => {
+  emit("onClick",status);
+};
+
 </script>
 
 <style lang="scss">
