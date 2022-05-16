@@ -21,13 +21,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { key } from "@/store";
-import { TodoStatus } from '@/assets/js/enum'
+import { TodoStatus } from "@/assets/js/enum";
 
 const store = useStore(key);
+let gridList = ref([]);
+
 const todolist = computed(() => store.state.todolist);
+
+watch(todolist, () => {
+  console.log("watch todolist");
+  formatGridList();
+});
 const finishlist = computed(() => store.state.finishlist);
 const emit = defineEmits<{ (e: "onClick"): void }>();
 const calcuFavoriteCount = () => {
@@ -36,37 +43,41 @@ const calcuFavoriteCount = () => {
   return arr1.length + arr2.length;
 };
 
-const gridList = ref([
-  {
-    title: "待办",
-    status: TodoStatus.Todo,
-    icon: "icon-todo",
-    count: todolist.value.length,
-  },
-  {
-    title: "已完成",
-    status: TodoStatus.Finish,
-    icon: "icon-done",
-    count: finishlist.value.length,
-  },
-  {
-    title: "全部",
-    icon: "icon-all",
-    status: TodoStatus.All,
-    count: todolist.value.length + finishlist.value.length,
-  },
-  {
-    title: "旗标",
-    status: TodoStatus.Flag,
-    icon: "icon-flag",
-    count: calcuFavoriteCount(),
-  },
-]);
+const formatGridList = () => {
 
-const onClickGirdItem = (status) => {
-  emit("onClick",status);
+  gridList.value = [
+    {
+      title: "待办",
+      status: TodoStatus.Todo,
+      icon: "icon-todo",
+      count: todolist.value.length,
+    },
+    {
+      title: "已完成",
+      status: TodoStatus.Finish,
+      icon: "icon-done",
+      count: finishlist.value.length,
+    },
+    {
+      title: "全部",
+      icon: "icon-all",
+      status: TodoStatus.All,
+      count: todolist.value.length + finishlist.value.length,
+    },
+    {
+      title: "旗标",
+      status: TodoStatus.Flag,
+      icon: "icon-flag",
+      count: calcuFavoriteCount(),
+    },
+  ]
 };
 
+formatGridList();
+
+const onClickGirdItem = (status) => {
+  emit("onClick", status);
+};
 </script>
 
 <style lang="scss">

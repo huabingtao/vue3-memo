@@ -3,7 +3,7 @@
     <switch-theme></switch-theme>
     <top-search v-model="query" @submit="submit"></top-search>
     <grid @onClick="onClickGirdItem"></grid>
-    <add-btn @onClick="openCreateView"></add-btn>
+    <add-btn :color="'#316af6'" @onClick="openCreateView"></add-btn>
     <create-view ref="createRef"></create-view>
     <router-view v-slot="{ Component }">
       <transition appear name="slide" >
@@ -20,12 +20,13 @@ import Grid from '@/components/grid/grid.vue';
 import List from '@/components/list/list.vue';
 import SwitchTheme from '@/components/switch-theme/switch-theme.vue';
 import TopSearch from '@/components/top-search/top-search.vue';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex'
 import CreateView from './createView/createView.vue';
 import useCreate from './createView/use-create';
 import { TodoStatus } from '@/assets/js/enum'
+import { key } from '@/store';
 
 
 
@@ -43,18 +44,26 @@ export default defineComponent({
     const query = ref("")
     const createRef = ref(null)
 
-    const store = useStore()
+    const store = useStore(key)
     const router = useRouter()
     const todolist = computed(() => store.state.todolist)
-    console.log("todolist:",todolist);
+    // console.log("todolist:",todolist.value);
+
+    onMounted(()=>{
+
+    })
     const submit = () => {
       console.log('submit:');
     }
 
+    watch(query,(newQuery)=>{
+      console.log('query:',newQuery);
+
+    })
+
     type statusString = keyof typeof TodoStatus;
 
     const onClickGirdItem = (status:statusString) => {
-      console.log(status);
       router.push(`/detail?status=${status}`)
     }
 

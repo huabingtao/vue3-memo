@@ -29,12 +29,12 @@ export const store = createStore<State>({
     },
     setTodolist(state,list){
       state.todolist = list
+    },
+    setFinishlist(state,list){
+      state.finishlist = list
     }
   },
   actions: {
-    // addItem({commit},list){
-    //   commit('setList',list)
-    // },
     addTodoItem({commit,state}, item){
       // commit('setList',list)
       const todolist = state.todolist.slice()
