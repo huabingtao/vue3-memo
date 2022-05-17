@@ -1,11 +1,12 @@
 import { key } from './../../store/index';
-import { TODO_KEY } from '@/assets/js/constant';
+import { TODO_KEY,ID_KEY } from '@/assets/js/constant';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex'
 
 export interface formDataType {
-  title:string,
-  description:string,
+  id: number,
+  title: string,
+  description: string,
   isFavorite: boolean,
   isFinish: boolean,
   isTrash: boolean
@@ -13,6 +14,7 @@ export interface formDataType {
 
 export default function useCreate(hidden:()=> void){
   const formData = ref<formDataType>({
+    id: 0,
     title: "",
     description: "",
     isFavorite: false,
@@ -36,10 +38,9 @@ export default function useCreate(hidden:()=> void){
     }
   })
 
-
-
   const clearForm = () => {
     formData.value = {
+      id: 0,
       title: "",
       description: "",
       isFavorite: false,
@@ -55,9 +56,18 @@ export default function useCreate(hidden:()=> void){
     return clist
   }
 
+  const setItemId = (item:formDataType) => {
+    let id:string | number = localStorage.getItem(ID_KEY) || "0"
+    id = Number(JSON.parse(id)) + 1
+    localStorage.setItem(ID_KEY,JSON.stringify(id))
+    item.id = id
+  }
+
+
   const onSubmit = () => {
     console.log('onSubmit');
     const item = formData.value
+    setItemId(item)
     const canSubmit = item.title !== ""
     if(!canSubmit) return
     addTodoItem(item)

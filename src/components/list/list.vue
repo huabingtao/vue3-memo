@@ -2,18 +2,18 @@
   <div class="list">
     <div class="list-title" :style="{ color }">{{ title }}</div>
     <div class="list-content">
-      <van-checkbox-group v-if="data.length" v-model="checked">
+      <van-checkbox-group  v-model="checked">
         <van-cell-group inset>
           <transition-group name="list" tag="div">
             <van-cell
               v-for="(item, index) in data"
-              :key="item.title"
+              :key="item.id"
               class="list-item"
               @click="toggle(index)"
             >
               <template #title>
                 <van-checkbox
-                  :name="item.title"
+                  :name="item.id"
                   :ref="(el) => (checkboxRefs[index] = el)"
                   >{{ item.title }}</van-checkbox
                 >
@@ -22,7 +22,7 @@
           </transition-group>
         </van-cell-group>
       </van-checkbox-group>
-      <van-empty v-else description="暂无事项" />
+      <van-empty v-if="!data.length" description="暂无事项" />
     </div>
   </div>
 </template>
@@ -51,19 +51,13 @@ const checkboxRefs = ref([]);
 const emit = defineEmits<{ (e: "onChangeData", data: formDataType[]): void }>();
 
 const toggle = (index) => {
-
   const cdata = _.cloneDeep(props.data)
   cdata.splice(index,1)
   emit("onChangeData",cdata);
 };
 
 watch(props.data,(newData)=>{
-  console.log('数据变化',newData);
   list = newData.slice()
-})
-
-watch(checked,(newChecked)=>{
-  console.log('watch checked',newChecked);
 })
 
 </script>
@@ -96,7 +90,7 @@ watch(checked,(newChecked)=>{
     transform: translate3d(-50%, -50%, 0);
   }
   .van-cell {
-    padding: 15px 44px;
+    padding: 15px 34px;
   }
   .list-checkbox {
     margin-left: -28px;
