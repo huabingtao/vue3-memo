@@ -2,6 +2,8 @@ import { key } from './../../store/index';
 import { TODO_KEY,ID_KEY } from '@/assets/js/constant';
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router';
+
 
 export interface formDataType {
   id: number,
@@ -13,11 +15,17 @@ export interface formDataType {
 }
 
 export default function useCreate(hidden:()=> void){
+
+  const route = useRoute()
+  console.log('route:',route);
+
+
+
   const formData = ref<formDataType>({
     id: 0,
     title: "",
     description: "",
-    isFavorite: false,
+    isFavorite: route.query.status === "3" ? true : false,
     isFinish: false,
     isTrash: false
   })

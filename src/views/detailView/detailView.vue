@@ -21,6 +21,7 @@ const store = useStore(key)
 const createRef = ref(null)
 const route = useRoute()
 let listData = ref([])
+const testList = ref([])
 let title = ref("")
 let color = ref("")
 const status = Number(route.query?.status)
@@ -29,14 +30,11 @@ const todolist = computed(() => store.state.todolist)
 const finishlist = computed(() => store.state.finishlist)
 
 watch(todolist, () => {
-  console.log("watch todolist2222");
-
   calcuListData();
 });
 
 // 处理列表修改的数据
 const handleChangeData = (newData) => {
-  console.log('onChangeData');
 
   switch (status) {
     case TodoStatus.Todo:
@@ -60,8 +58,6 @@ const handleChangeData = (newData) => {
   console.log('newData:',newData);
 }
 
-
-
 const calcuListData = () => {
   // 转化事项状态为数字类型
   // listData = ref([])
@@ -79,27 +75,18 @@ const calcuListData = () => {
     case TodoStatus.All:
       title = "全部"
       color = "#51565e"
-      listData = [...computed(() => store.state.todolist).value,...computed(() => store.state.finishlist).value]
+      listData.value = [...computed(() => store.state.todolist).value,...computed(() => store.state.finishlist).value]
       break;
     default:
       title = "旗标"
       color = "#e99f2f"
       const todolist = computed(() => store.state.todolist)
       const finishlist = computed(() => store.state.finishlist)
-      // console.log('todolist:',todolist.value,todolist.value.filter(item=> item.isFavorite));
-
       const arr1 = todolist.value.filter(item=> item.isFavorite)
       const arr2 = finishlist.value.filter(item => item.isFavorite)
-      // console.log('arr1:',arr1,arr2);
+      const clist = [...todolist.value,...finishlist.value]
 
-
-
-      listData = [...arr1,...arr2]
-      // console.log('listData:', listData);
-      // const clist = [...todolist.value,...finishlist.value]
-
-      // listData = ref(clist.filter(item=>item.isFavorite))
-
+      listData.value = clist.filter(item=>item.isFavorite)
       break;
   }
 }

@@ -13,10 +13,20 @@
             >
               <template #title>
                 <van-checkbox
+                  :disabled="item.isFinish"
                   :name="item.id"
                   :ref="(el) => (checkboxRefs[index] = el)"
-                  >{{ item.title }}</van-checkbox
-                >
+                  >
+                  {{ item.title }}
+                  <template #icon="item">
+                    <span :class="['checkbox-icon', item.checked ? 'is-active' : '']"></span>
+                  </template>
+                  </van-checkbox>
+              </template>
+              <template #right-icon v-if="item.isFavorite">
+                <svg class="icon svg-icon" aria-hidden="true">
+                  <use xlink:href="#icon-flag"></use>
+                </svg>
               </template>
             </van-cell>
           </transition-group>
@@ -44,27 +54,37 @@ const props = defineProps<{
   title: string;
   color: string;
 }>();
+console.log('props.data:',props.data.map(item=> item.isFinish));
 
-const checked = ref([]);
+const checked = ref(props.data.map(item=>{
+  return item.isFinish && item.id
+}));
+
 const checkboxRefs = ref([]);
 
 const emit = defineEmits<{ (e: "onChangeData", data: formDataType[]): void }>();
 
 const toggle = (index) => {
+  // checkboxRefs.value[index].toggle();
   const cdata = _.cloneDeep(props.data)
-  cdata.splice(index,1)
+  cdata[index].isFinish = true
   emit("onChangeData",cdata);
 };
 
 watch(props.data,(newData)=>{
-  list = newData.slice()
-})
+  console.log('watch props.data');
+},{deep:true})
 
 </script>
 
 <style lang="scss">
 @import "@/assets/style/minxin.scss";
 .list {
+
+  .van-cell__title{
+    display: flex;
+    align-items: center
+  }
   .van-cell-group,
   .van-cell {
     @include background_color("color-list-bg");
@@ -78,6 +98,7 @@ watch(props.data,(newData)=>{
   }
   .list-content {
     height: calc(100vh - 100px);
+    overflow-y: scroll;
   }
   .list-title {
     font-size: 1.3rem;
@@ -90,18 +111,31 @@ watch(props.data,(newData)=>{
     transform: translate3d(-50%, -50%, 0);
   }
   .van-cell {
-    padding: 15px 34px;
+    padding: 15px 10px;
   }
   .list-checkbox {
     margin-left: -28px;
   }
   .list-item {
-    transition: all 0.8s ease;
+    transition: all 0.8s ease ;
   }
   .list-enter-from,
   .list-leave-to {
     opacity: 0;
     transform: translateX(30px);
+  }
+  .checkbox-icon{
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border: 1px solid ;
+    @include border_color("color-checkbox-border");
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    &.is-active{
+      background: #e08d48;
+    }
   }
 }
 </style>

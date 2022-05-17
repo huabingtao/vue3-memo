@@ -27,15 +27,16 @@ import { key } from "@/store";
 import { TodoStatus } from "@/assets/js/enum";
 
 const store = useStore(key);
-let gridList = ref([]);
 
+let gridList = ref([]);
 const todolist = computed(() => store.state.todolist);
+const finishlist = computed(() => store.state.finishlist);
 
 watch(todolist, () => {
-  console.log("watch todolist");
   formatGridList();
 });
-const finishlist = computed(() => store.state.finishlist);
+
+
 const emit = defineEmits<{ (e: "onClick"): void }>();
 const calcuFavoriteCount = () => {
   const arr1 = todolist.value.filter((item) => item.isFavorite);
