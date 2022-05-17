@@ -7,9 +7,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: HomeView,
     children:[{
-      path: '/detail',
-      name: 'DetailView',
-      component: () => import(/* webpackChunkName: "about" */ '../views/detailView/detailView.vue')
+      path: '/list',
+      name: 'ListView',
+      component: () => import(/* webpackChunkName: "about" */ '../views/listView/listView.vue')
     }]
   }
 ]

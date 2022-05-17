@@ -14,17 +14,16 @@
 </template>
 
 <script lang="ts">
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LIST_KEY } from '@/assets/js/constant';
 import AddBtn from '@/components/add-btn/add-btn.vue';
 import Grid from '@/components/grid/grid.vue';
-import List from '@/components/list/list.vue';
 import SwitchTheme from '@/components/switch-theme/switch-theme.vue';
 import TopSearch from '@/components/top-search/top-search.vue';
-import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex'
 import CreateView from './createView/createView.vue';
-import useCreate from './createView/use-create';
 import { TodoStatus } from '@/assets/js/enum'
 import { key } from '@/store';
 
@@ -49,9 +48,6 @@ export default defineComponent({
     const todolist = computed(() => store.state.todolist)
     // console.log("todolist:",todolist.value);
 
-    onMounted(()=>{
-
-    })
     const submit = () => {
       console.log('submit:');
     }
@@ -64,11 +60,11 @@ export default defineComponent({
     type statusString = keyof typeof TodoStatus;
 
     const onClickGirdItem = (status:statusString) => {
-      router.push(`/detail?status=${status}`)
+      router.push(`/list?status=${status}`)
     }
 
     const openCreateView = () => {
-      //@ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
       createRef?.value?.show()
     }
     return{
