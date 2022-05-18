@@ -4,7 +4,6 @@
     <div class="list-content">
       <van-checkbox-group  v-model="checked">
       <transition-group name="list" tag="div">
-
         <van-swipe-cell v-for="(item, index) in data" :key="item.id" class="list-item">
           <van-cell @click="toggle(index)">
             <template #title >
@@ -12,7 +11,6 @@
                   :disabled="item.isFinish"
                   :name="item.id"
                   :ref="(el) => (checkboxRefs[index] = el)"
-
                   >
                   {{ item.title }}
                   <template #icon="item">
@@ -54,7 +52,6 @@ const props = defineProps<{
 }>();
 
 console.log(
-  "props.data:",
   props.data.map((item) => item.isFinish)
 );
 
@@ -66,17 +63,17 @@ const checked = ref(
 
 const checkboxRefs = ref([]);
 
-const emit = defineEmits<{ (e: "onChangeData", data: formDataType[]): void }>();
+const emit = defineEmits<{ (e: "onChangeData", data: formDataType[]): void,(e: "onViewDetail", data: formDataType): void }>();
 
 const toggle = (index) => {
-  checkboxRefs.value[index].toggle();
+  // checkboxRefs.value[index].toggle();
   const cdata = _.cloneDeep(props.data);
-  cdata[index].isFinish = true;
-  emit("onChangeData", cdata);
+  cdata[index].isFinish = !(cdata[index].isFinish);
+  emit("onChangeData", cdata, cdata[index], index);
 };
 
 const goDetail = (item) => {
-  console.log('item:',item);
+  emit("onViewDetail",item)
 }
 
 const toggleFavorite = (index) => {

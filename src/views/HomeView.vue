@@ -41,21 +41,15 @@ export default defineComponent({
   setup(){
 
     const query = ref("")
-    const createRef = ref(null)
+    const createRef = ref()
 
     const store = useStore(key)
     const router = useRouter()
     const todolist = computed(() => store.state.todolist)
-    // console.log("todolist:",todolist.value);
 
     const submit = () => {
       console.log('submit:');
     }
-
-    watch(query,(newQuery)=>{
-      console.log('query:',newQuery);
-
-    })
 
     type statusString = keyof typeof TodoStatus;
 
@@ -64,7 +58,6 @@ export default defineComponent({
     }
 
     const openCreateView = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
       createRef?.value?.show()
     }
     return{

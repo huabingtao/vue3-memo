@@ -20,9 +20,6 @@ export const store = createStore<State>({
     finishlist: JSON.parse(localStorage.getItem(FINISH_KEY) || "[]"),
     trashlist: JSON.parse(localStorage.getItem(TRASH_KEY) || "[]"),
   },
-  getters: {
-
-  },
   mutations: {
     setList(state,list){
       state.list = list
@@ -36,7 +33,6 @@ export const store = createStore<State>({
   },
   actions: {
     addTodoItem({commit,state}, item){
-      // commit('setList',list)
       const todolist = state.todolist.slice()
       todolist.push(item)
       commit('setTodolist',todolist)

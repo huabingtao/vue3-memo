@@ -1,104 +1,196 @@
 <template>
   <div class="detail-container">
-    <list :data="listData" @onChangeData="handleChangeData" :title="title" :color="color"></list>
-    <add-btn v-if="status === 0 || status === 3" :color="color" @onClick="openCreateView"></add-btn>
-    <create-view ref="createRef"></create-view>
+    <list
+      :data="listData"
+      @onChangeData="handleChangeData"
+      @onViewDetail="handleOnViewDetail"
+      :title="title"
+      :color="color"
+    ></list>
+    <add-btn
+      v-if="status === 0 || status === 3"
+      :color="color"
+      @onClick="openCreateView"
+    ></add-btn>
+    <create-view
+      ref="createRef"
+      :data="createData"
+      :title="createViewTitle"
+      :rightBtnText="rightBtnText"
+      :isEdit="{ isEdit }"
+    ></create-view>
   </div>
 </template>
 
 <script setup lang="ts">
 import addBtn from "@/components/add-btn/add-btn.vue";
 import list from "@/components/list/list.vue";
-import CreateView from '../createView/createView.vue';
+import CreateView from "../createView/createView.vue";
 import { key } from "@/store";
 import { computed, ref, watch } from "vue";
-import { useStore } from 'vuex'
-import { useRoute } from 'vue-router';
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import { TodoStatus } from "@/assets/js/enum";
 import { FINISH_KEY, TODO_KEY } from "@/assets/js/constant";
 
-const store = useStore(key)
-const createRef = ref(null)
-const route = useRoute()
-let listData = ref([])
-let title = ref("")
-let color = ref("")
-const status = Number(route.query?.status)
+const store = useStore(key);
+const createRef = ref(null);
+const route = useRoute();
+let listData = ref([]);
+let title = ref("");
+let createViewTitle = ref("");
+let rightBtnText = ref("");
+let isEdit = ref(false);
+let color = ref("");
+const createData = ref(null);
+const status = Number(route.query?.status);
 
-const todolist = computed(() => store.state.todolist)
-const finishlist = computed(() => store.state.finishlist)
+const todolist = computed(() => store.state.todolist);
+const finishlist = computed(() => store.state.finishlist);
 
 watch(todolist, () => {
   calcuListData();
 });
 
 // 处理列表修改的数据
-const handleChangeData = (newData) => {
-
-  switch (status) {
-    case TodoStatus.Todo:
-      const newtodolist = newData.filter(item=> !item.isFinish)
-      const newfinishlist = newData.filter(item => item.isFinish)
-      localStorage.setItem(TODO_KEY,JSON.stringify(newtodolist))
-      localStorage.setItem(FINISH_KEY,JSON.stringify([...finishlist.value,...newfinishlist]))
-      store.commit("setTodolist",newtodolist)
-      store.commit("setFinishlist",[...finishlist.value,...newfinishlist])
-      break;
-    case TodoStatus.Finish:
-      // const newtodolist = newData.filter(item=> !item.isFinish)
-      // const newfinishlist = newData.filter(item => item.isFinish)
-      // localStorage.setItem(TODO_KEY,JSON.stringify(newtodolist))
-      // localStorage.setItem(FINISH_KEY,JSON.stringify([...finishlist.value,...newfinishlist]))
-      // store.commit("setTodolist",newtodolist)
-      // store.commit("setFinishlist",[...finishlist.value,...newfinishlist])
-    default:
-
-      break;
+const handleChangeData = (newData,changeItem,changeIndex) => {
+  if (status === TodoStatus.Todo) {
+    const newtodolist = newData.filter((item) => !item.isFinish);
+    const newfinishlist = newData.filter((item) => item.isFinish);
+    localStorage.setItem(TODO_KEY, JSON.stringify(newtodolist));
+    localStorage.setItem(
+      FINISH_KEY,
+      JSON.stringify([...finishlist.value, ...newfinishlist])
+    );
+    store.commit("setTodolist", newtodolist);
+    store.commit("setFinishlist", [...finishlist.value, ...newfinishlist]);
   }
-  console.log('newData:',newData);
-}
+  if (status === TodoStatus.Finish) {
+    const newTodolistItem = newData.filter((item) => !item.isFinish)[0];
+    const id = newTodolistItem.id;
+    const newFinishlist = finishlist.value.slice();
+    const index = newFinishlist.findIndex((item) => item.id === id);
+    const newTodolist = [...todolist.value, newTodolistItem];
+    newFinishlist.splice(index, 1);
+    localStorage.setItem(TODO_KEY, JSON.stringify(newTodolist));
+    localStorage.setItem(FINISH_KEY, JSON.stringify(newFinishlist));
+    store.commit("setTodolist", newTodolist);
+    store.commit("setFinishlist", newFinishlist);
+  }
+  if(status === TodoStatus.All){
+    const { isFinish, id } = changeItem
+    const newTodolist = todolist.value.slice()
+    const newFinishlist = finishlist.value.slice()
+    const allList = [...newTodolist,...newFinishlist]
+
+    if(isFinish){
+      // if isFinish has true then todolist less finishlist add
+      const index = newTodolist.findIndex( todo => todo.id === id )
+      newTodolist.splice(index,1)
+      newFinishlist.unshift(changeItem)
+    }else{
+       const index = newFinishlist.findIndex( finish => finish.id === id )
+       newFinishlist.splice(index,1)
+       newTodolist.unshift(changeItem)
+    }
+
+    localStorage.setItem(TODO_KEY, JSON.stringify(newTodolist));
+    localStorage.setItem(FINISH_KEY, JSON.stringify(newFinishlist));
+    store.commit("setTodolist", newTodolist);
+    store.commit("setFinishlist", newFinishlist);
+  }
+
+  // switch (status) {
+  //   case TodoStatus.Todo:
+  //     console.log('处理Todo',newData);
+  //     const newtodolist = newData.filter(item=> !item.isFinish)
+  //     const newfinishlist = newData.filter(item => item.isFinish)
+  //     localStorage.setItem(TODO_KEY,JSON.stringify(newtodolist))
+  //     localStorage.setItem(FINISH_KEY,JSON.stringify([...finishlist.value,...newfinishlist]))
+  //     store.commit("setTodolist",newtodolist)
+  //     store.commit("setFinishlist",[...finishlist.value,...newfinishlist])
+  //     break;
+  //   case TodoStatus.Finish:
+  //     console.log('处理finish',newData);
+
+  //     // const newtodolist = newData.filter(item=> !item.isFinish)
+  //     // const newfinishlist = newData.filter(item => item.isFinish)
+  //     // localStorage.setItem(TODO_KEY,JSON.stringify(newtodolist))
+  //     // localStorage.setItem(FINISH_KEY,JSON.stringify([...finishlist.value,...newfinishlist]))
+  //     // store.commit("setTodolist",newtodolist)
+  //     // store.commit("setFinishlist",[...finishlist.value,...newfinishlist])
+  //   default:
+
+  //     break;
+  // }
+};
 
 const calcuListData = () => {
   // 转化事项状态为数字类型
   // listData = ref([])
   switch (status) {
     case TodoStatus.Todo:
-      title = "待办"
-      color = "#316af6"
-      listData = computed(() => store.state.todolist)
+      title = "待办";
+      color = "#316af6";
+      listData = computed(() => store.state.todolist);
       break;
     case TodoStatus.Finish:
-      title = "已完成"
-      color = "#767676"
-      listData = computed(() => store.state.finishlist)
+      title = "已完成";
+      color = "#767676";
+      listData = computed(() => store.state.finishlist);
       break;
     case TodoStatus.All:
-      title = "全部"
-      color = "#51565e"
-      listData.value = [...computed(() => store.state.todolist).value,...computed(() => store.state.finishlist).value]
+      title = "全部";
+      color = "#51565e";
+      listData.value = [
+        ...computed(() => store.state.todolist).value,
+        ...computed(() => store.state.finishlist).value,
+      ];
       break;
     default:
-      title = "旗标"
-      color = "#e99f2f"
-      const todolist = computed(() => store.state.todolist)
-      const finishlist = computed(() => store.state.finishlist)
-      // const arr1 = todolist.value.filter(item=> item.isFavorite)
-      // const arr2 = finishlist.value.filter(item => item.isFavorite)
-      const clist = [...todolist.value,...finishlist.value]
-
-      listData.value = clist.filter(item=>item.isFavorite)
+      title = "旗标";
+      color = "#e99f2f";
+      const todolist = computed(() => store.state.todolist);
+      const finishlist = computed(() => store.state.finishlist);
+      const clist = [...todolist.value, ...finishlist.value];
+      listData.value = clist.filter((item) => item.isFavorite);
       break;
   }
-}
+};
 
-calcuListData()
+calcuListData();
 
 const openCreateView = () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  createData.value = {
+    id: 0,
+    title: "",
+    description: "",
+    isFavorite: route.query.status === "3" ? true : false,
+    isFinish: false,
+    isTrash: false,
+  };
+  createViewTitle.value = "新建事项";
+  rightBtnText.value = "添加";
+  isEdit.value = false;
+  createRef?.value?.show();
+};
 
-  //@ts-ignore
-  createRef?.value?.show()
-}
+const handleOnViewDetail = (item) => {
+  createData.value = { ...item };
+  createViewTitle.value = "详细信息";
+  rightBtnText.value = "完成";
+  isEdit.value = true;
+  createRef?.value?.show();
 
+  // console.log('createRef?.value:',createRef?.value);
+
+  // console.log('item1:', createRef?.value?.formData.id);
+  // createRef?.value?.formData = {}
+  // createRef?.value?.formData = "123"
+  // createRef?.value?.show()
+};
 </script>
 
 <style lang="scss">

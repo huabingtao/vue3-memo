@@ -9,8 +9,8 @@
     <div class="create">
       <div class="create-head">
         <div class="cancel" @click="toggleCreateModal">取消</div>
-        <div class="title">新建事项</div>
-        <div class="add" :class="submitBtnClass" @click="onSubmit">添加</div>
+        <div class="title">{{title}}</div>
+        <div class="add" :class="submitBtnClass" @click="onSubmit">{{rightBtnText}}</div>
       </div>
       <div class="create-field">
         <van-cell-group inset>
@@ -45,18 +45,23 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { ref, watch } from "vue";
 import useCreate from './use-create'
 export default {
-  data() {
-    return {
-      title: "",
-      remark: "",
-      isFavorite: false,
-    };
+  props:{
+    data:{
+      type: Object
+    },
+    title:{
+      type: String
+    },
+    rightBtnText:{
+      type: String
+    }
   },
-  setup() {
+  setup(props) {
     const visible = ref(false);
+
     const toggleCreateModal = () => {
       visible.value = !visible.value;
     };
@@ -69,7 +74,15 @@ export default {
       visible.value = false;
     };
 
-    const {formData, submitBtnClass, onSubmit} = useCreate(hidden)
+    watch(
+      props,
+      (newProps) => {
+        console.log("这里看到新值",newProps); //这里看到新值
+        createData(newProps.data)
+      }
+    );
+
+    const {formData, submitBtnClass, onSubmit, createData} = useCreate(hidden)
 
     // defineExpose({visible,show,hidden,toggleCreateModal})
     return {
@@ -78,8 +91,8 @@ export default {
       show,
       hidden,
       toggleCreateModal,
-      onSubmit,
-      submitBtnClass
+      submitBtnClass,
+      onSubmit
     };
   },
 };
