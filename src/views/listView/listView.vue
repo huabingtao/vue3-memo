@@ -5,6 +5,7 @@
       @onToggleFinish="handleToggleFinish"
       @onViewDetail="handleOnViewDetail"
       @onToggleFavorite="handleOnToggleFavorite"
+      @onDeleteMatter="handleDeleteMatter"
       :title="title"
       :color="color"
     ></list>
@@ -53,7 +54,6 @@ watch([todolist, finishlist], () => {
   calcuListData();
 });
 
-// 处理列表修改的数据
 const handleToggleFinish = ( changeItem, changeIndex) => {
   if (status === TodoStatus.Todo) {
     // first set true for isFinish,then remove the item
@@ -191,6 +191,24 @@ const handleOnToggleFavorite = (id) => {
     store.commit("setFinishlist", newFinishlist);
   }
 };
+
+const handleDeleteMatter = (id) => {
+  const newTodolist = todolist.value.slice();
+  const newFinishlist = finishlist.value.slice();
+  const todolistIndex = newTodolist.findIndex((item) => item.id === id);
+  const finishlistIndex = newFinishlist.findIndex((item) => item.id === id);
+  if (todolistIndex > -1) {
+    newTodolist.splice(todolistIndex,1)
+    localStorage.setItem(TODO_KEY, JSON.stringify(newTodolist))
+    store.commit("setTodolist", newTodolist)
+  }
+  if (finishlistIndex > -1) {
+    newFinishlist.splice(finishlistIndex,1)
+    localStorage.setItem(FINISH_KEY, JSON.stringify(newFinishlist))
+    store.commit("setFinishlist",newFinishlist)
+  }
+}
+
 </script>
 
 <style lang="scss">

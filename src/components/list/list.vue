@@ -50,7 +50,7 @@
                 :text="item.isFavorite ? '取消旗标' : '旗标'"
               />
               <van-button
-                @click="onClickDelete(item)"
+                @click="deleteMatter(item.id)"
                 class="btn btn-delete"
                 square
                 type="danger"
@@ -82,6 +82,7 @@ const emit = defineEmits<{
   (e: "onToggleFinish", item: formDataType, index: number): void;
   (e: "onViewDetail", data: formDataType): void;
   (e: "onToggleFavorite", id: number): void;
+  (e: "onDeleteMatter", id: number): void;
 }>();
 
 const toggle = (item,index) => {
@@ -95,6 +96,10 @@ const goDetail = (item) => {
 const toggleFavorite = (id) => {
   emit("onToggleFavorite", id);
 };
+
+const deleteMatter = (id) => {
+  emit("onDeleteMatter", id);
+}
 </script>
 
 <style lang="scss">
