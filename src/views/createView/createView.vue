@@ -53,10 +53,12 @@ export default {
       type: Object
     },
     title:{
-      type: String
+      type: String,
+      default: "新建事项"
     },
     rightBtnText:{
-      type: String
+      type: String,
+      default: "添加"
     }
   },
   setup(props) {

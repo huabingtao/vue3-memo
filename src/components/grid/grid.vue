@@ -36,6 +36,10 @@ watch(todolist, () => {
   formatGridList();
 });
 
+watch(finishlist, () => {
+  formatGridList();
+});
+
 
 const emit = defineEmits<{ (e: "onClick"): void }>();
 const calcuFavoriteCount = () => {

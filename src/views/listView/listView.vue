@@ -2,8 +2,9 @@
   <div class="detail-container">
     <list
       :data="listData"
-      @onChangeData="handleChangeData"
+      @onToggleFinish="handleToggleFinish"
       @onViewDetail="handleOnViewDetail"
+      @onToggleFavorite="handleOnToggleFavorite"
       :title="title"
       :color="color"
     ></list>
@@ -48,50 +49,55 @@ const status = Number(route.query?.status);
 const todolist = computed(() => store.state.todolist);
 const finishlist = computed(() => store.state.finishlist);
 
-watch(todolist, () => {
+watch([todolist, finishlist], () => {
   calcuListData();
 });
 
 // 处理列表修改的数据
-const handleChangeData = (newData,changeItem,changeIndex) => {
+const handleToggleFinish = ( changeItem, changeIndex) => {
   if (status === TodoStatus.Todo) {
-    const newtodolist = newData.filter((item) => !item.isFinish);
-    const newfinishlist = newData.filter((item) => item.isFinish);
+    // first set true for isFinish,then remove the item
+    const newtodolist = todolist.value.slice();
+    newtodolist.splice(changeIndex, 1);
     localStorage.setItem(TODO_KEY, JSON.stringify(newtodolist));
+    changeItem.isFinish = true
     localStorage.setItem(
       FINISH_KEY,
-      JSON.stringify([...finishlist.value, ...newfinishlist])
+      JSON.stringify([...finishlist.value, changeItem])
     );
+
     store.commit("setTodolist", newtodolist);
-    store.commit("setFinishlist", [...finishlist.value, ...newfinishlist]);
+    store.commit("setFinishlist", [...finishlist.value, changeItem]);
   }
   if (status === TodoStatus.Finish) {
-    const newTodolistItem = newData.filter((item) => !item.isFinish)[0];
-    const id = newTodolistItem.id;
-    const newFinishlist = finishlist.value.slice();
-    const index = newFinishlist.findIndex((item) => item.id === id);
-    const newTodolist = [...todolist.value, newTodolistItem];
-    newFinishlist.splice(index, 1);
-    localStorage.setItem(TODO_KEY, JSON.stringify(newTodolist));
-    localStorage.setItem(FINISH_KEY, JSON.stringify(newFinishlist));
-    store.commit("setTodolist", newTodolist);
-    store.commit("setFinishlist", newFinishlist);
+    const newFinishList = finishlist.value.slice()
+    newFinishList.splice(changeIndex,1)
+    changeItem.isFinish = false
+    const newTodolist = [changeItem,...todolist.value]
+    localStorage.setItem(FINISH_KEY, JSON.stringify(newFinishList));
+    localStorage.setItem(
+      TODO_KEY,
+      JSON.stringify(newTodolist)
+    );
+    store.commit('setTodolist', newTodolist)
+    store.commit('setFinishlist', newFinishList)
   }
-  if(status === TodoStatus.All){
-    const { isFinish, id } = changeItem
-    const newTodolist = todolist.value.slice()
-    const newFinishlist = finishlist.value.slice()
-    const allList = [...newTodolist,...newFinishlist]
+  if (status === TodoStatus.All || status === TodoStatus.Flag) {
+    const { isFinish, id } = changeItem;
+    const newTodolist = todolist.value.slice();
+    const newFinishlist = finishlist.value.slice();
 
-    if(isFinish){
-      // if isFinish has true then todolist less finishlist add
-      const index = newTodolist.findIndex( todo => todo.id === id )
-      newTodolist.splice(index,1)
-      newFinishlist.unshift(changeItem)
-    }else{
-       const index = newFinishlist.findIndex( finish => finish.id === id )
-       newFinishlist.splice(index,1)
-       newTodolist.unshift(changeItem)
+    if (isFinish) {
+      // if isFinish has true then finishlist less todolist add
+      const index = newFinishlist.findIndex(finish=> finish.id === id)
+      newFinishlist.splice(index,1)
+      changeItem.isFinish = false
+      newTodolist.unshift(changeItem);
+    } else {
+      const index = newTodolist.findIndex((finish) => finish.id === id);
+      newTodolist.splice(index, 1);
+      changeItem.isFinish = true
+      newFinishlist.unshift(changeItem);
     }
 
     localStorage.setItem(TODO_KEY, JSON.stringify(newTodolist));
@@ -99,35 +105,10 @@ const handleChangeData = (newData,changeItem,changeIndex) => {
     store.commit("setTodolist", newTodolist);
     store.commit("setFinishlist", newFinishlist);
   }
-
-  // switch (status) {
-  //   case TodoStatus.Todo:
-  //     console.log('处理Todo',newData);
-  //     const newtodolist = newData.filter(item=> !item.isFinish)
-  //     const newfinishlist = newData.filter(item => item.isFinish)
-  //     localStorage.setItem(TODO_KEY,JSON.stringify(newtodolist))
-  //     localStorage.setItem(FINISH_KEY,JSON.stringify([...finishlist.value,...newfinishlist]))
-  //     store.commit("setTodolist",newtodolist)
-  //     store.commit("setFinishlist",[...finishlist.value,...newfinishlist])
-  //     break;
-  //   case TodoStatus.Finish:
-  //     console.log('处理finish',newData);
-
-  //     // const newtodolist = newData.filter(item=> !item.isFinish)
-  //     // const newfinishlist = newData.filter(item => item.isFinish)
-  //     // localStorage.setItem(TODO_KEY,JSON.stringify(newtodolist))
-  //     // localStorage.setItem(FINISH_KEY,JSON.stringify([...finishlist.value,...newfinishlist]))
-  //     // store.commit("setTodolist",newtodolist)
-  //     // store.commit("setFinishlist",[...finishlist.value,...newfinishlist])
-  //   default:
-
-  //     break;
-  // }
 };
 
 const calcuListData = () => {
   // 转化事项状态为数字类型
-  // listData = ref([])
   switch (status) {
     case TodoStatus.Todo:
       title = "待办";
@@ -190,6 +171,25 @@ const handleOnViewDetail = (item) => {
   // createRef?.value?.formData = {}
   // createRef?.value?.formData = "123"
   // createRef?.value?.show()
+};
+
+const handleOnToggleFavorite = (id) => {
+  const newTodolist = todolist.value.slice();
+  const newFinishlist = finishlist.value.slice();
+  const todolistIndex = newTodolist.findIndex((item) => item.id === id);
+  const finishlistIndex = newFinishlist.findIndex((item) => item.id === id);
+  if (todolistIndex > -1) {
+    newTodolist[todolistIndex].isFavorite =
+      !newTodolist[todolistIndex].isFavorite;
+    localStorage.setItem(TODO_KEY, JSON.stringify(newTodolist));
+    store.commit("setTodolist", newTodolist);
+  }
+  if (finishlistIndex > -1) {
+    newFinishlist[finishlistIndex].isFavorite =
+      !newFinishlist[finishlistIndex].isFavorite;
+    localStorage.setItem(FINISH_KEY, JSON.stringify(newFinishlist));
+    store.commit("setFinishlist", newFinishlist);
+  }
 };
 </script>
 

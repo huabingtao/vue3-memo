@@ -2,35 +2,63 @@
   <div class="list">
     <div class="list-title" :style="{ color }">{{ title }}</div>
     <div class="list-content">
-      <van-checkbox-group  v-model="checked">
-      <transition-group name="list" tag="div">
-        <van-swipe-cell v-for="(item, index) in data" :key="item.id" class="list-item">
-          <van-cell @click="toggle(index)">
-            <template #title >
-                <van-checkbox
+      <van-checkbox-group>
+        <transition-group name="list" tag="div">
+          <van-swipe-cell
+            v-for="(item, index) in data"
+            :key="item.id"
+            class="list-item"
+          >
+            <van-cell @click="toggle(item,index)">
+              <template #title>
+                <!-- <van-checkbox
                   :disabled="item.isFinish"
                   :name="item.id"
                   :ref="(el) => (checkboxRefs[index] = el)"
                   >
                   {{ item.title }}
                   <template #icon="item">
-                    <span :class="['checkbox-icon', item.checked ? 'is-active' : '']"></span>
+
                   </template>
-                  </van-checkbox>
+                  </van-checkbox> -->
+                <div class="check-box">
+                  <span
+                    :class="['checkbox-icon', item.isFinish ? 'is-active' : '']"
+                  ></span>
+                  <span>{{ item.title }}</span>
+                </div>
               </template>
               <template #right-icon v-if="item.isFavorite">
                 <svg class="icon svg-icon" aria-hidden="true">
                   <use xlink:href="#icon-flag"></use>
                 </svg>
               </template>
-          </van-cell>
-          <template #right>
-            <van-button @click="goDetail(item)" class="btn btn-detail" square type="primary" text="详细信息" />
-            <van-button @click="toggleFavorite(index)" class="btn btn-favorite" square type="primary" :text="item.isFavorite ? '取消旗标' : '旗标' " />
-            <van-button @click="onClickDelete(item)" class="btn btn-delete" square type="danger" text="删除" />
-          </template>
-        </van-swipe-cell>
-      </transition-group>
+            </van-cell>
+            <template #right>
+              <van-button
+                @click="goDetail(item)"
+                class="btn btn-detail"
+                square
+                type="primary"
+                text="详细信息"
+              />
+              <van-button
+                @click="toggleFavorite(item.id)"
+                class="btn btn-favorite"
+                square
+                type="primary"
+                :text="item.isFavorite ? '取消旗标' : '旗标'"
+              />
+              <van-button
+                @click="onClickDelete(item)"
+                class="btn btn-delete"
+                square
+                type="danger"
+                text="删除"
+              />
+            </template>
+          </van-swipe-cell>
+        </transition-group>
       </van-checkbox-group>
       <van-empty v-if="!data.length" description="暂无事项" />
     </div>
@@ -38,12 +66,9 @@
 </template>
 
 <script setup lang="ts">
-
 import _ from "lodash";
 import { formDataType } from "@/views/createView/use-create";
-import {
-  ref,
-} from "@vue/runtime-core";
+import { ref } from "@vue/runtime-core";
 
 const props = defineProps<{
   data: formDataType[];
@@ -51,44 +76,50 @@ const props = defineProps<{
   color: string;
 }>();
 
-console.log(
-  props.data.map((item) => item.isFinish)
-);
-
-const checked = ref(
-  props.data.map((item) => {
-    return item.isFinish && item.id;
-  })
-);
-
 const checkboxRefs = ref([]);
 
-const emit = defineEmits<{ (e: "onChangeData", data: formDataType[]): void,(e: "onViewDetail", data: formDataType): void }>();
+const emit = defineEmits<{
+  (e: "onToggleFinish", item: formDataType, index: number): void;
+  (e: "onViewDetail", data: formDataType): void;
+  (e: "onToggleFavorite", id: number): void;
+}>();
 
-const toggle = (index) => {
-  // checkboxRefs.value[index].toggle();
-  const cdata = _.cloneDeep(props.data);
-  cdata[index].isFinish = !(cdata[index].isFinish);
-  emit("onChangeData", cdata, cdata[index], index);
+const toggle = (item,index) => {
+  emit("onToggleFinish", item , index);
 };
 
 const goDetail = (item) => {
-  emit("onViewDetail",item)
-}
+  emit("onViewDetail", item);
+};
 
-const toggleFavorite = (index) => {
-
-  const cdata = _.cloneDeep(props.data);
-  cdata[index].isFavorite = !cdata[index].isFavorite;
-  emit("onChangeData", cdata);
-}
-
+const toggleFavorite = (id) => {
+  emit("onToggleFavorite", id);
+};
 </script>
 
 <style lang="scss">
 @import "@/assets/style/minxin.scss";
 .list {
-  .svg-icon{
+  .check-box {
+    display: flex;
+    align-items: center;
+    @include color("color-count");
+    .checkbox-icon {
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border: 1px solid;
+      @include border_color("color-checkbox-border");
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      &.is-active {
+        background: #e08d48;
+      }
+    }
+  }
+  .svg-icon {
     width: 1.3rem;
     height: 1.3rem;
   }
@@ -96,8 +127,8 @@ const toggleFavorite = (index) => {
     display: flex;
     align-items: center;
   }
-  .van-cell:after{
-    right:0;
+  .van-cell:after {
+    right: 0;
   }
   .van-cell-group,
   .van-cell {
@@ -140,32 +171,20 @@ const toggleFavorite = (index) => {
     opacity: 0;
     transform: translateX(30px);
   }
-  .checkbox-icon {
-    width: 20px;
-    height: 20px;
-    background: transparent;
-    border: 1px solid;
-    @include border_color("color-checkbox-border");
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    &.is-active {
-      background: #e08d48;
-    }
-  }
-  .btn{
+
+  .btn {
     height: 100%;
     box-sizing: border-box;
     border: none;
     top: -1px;
-    &.btn-detail{
-      @include background_color("color-btn-detail")
+    &.btn-detail {
+      @include background_color("color-btn-detail");
     }
-    &.btn-favorite{
-      @include background_color("color-btn-favorite")
+    &.btn-favorite {
+      @include background_color("color-btn-favorite");
     }
-    &.btn-delete{
-      @include background_color("color-btn-delete")
+    &.btn-delete {
+      @include background_color("color-btn-delete");
     }
   }
 }
