@@ -1,4 +1,4 @@
-# vue3-todolist
+# vue3-memo
 
 ## Project setup
 ```
