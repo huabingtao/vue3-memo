@@ -36,5 +36,6 @@ export default {
 .them {
   text-align: right;
   padding-right: 10px;
+  padding-top: 10px;
 }
 </style>

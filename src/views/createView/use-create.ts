@@ -59,7 +59,7 @@ export default function useCreate( hidden: () => void) {
 
   const addTodoItem = (item: formDataType) => {
     const clist = todolist.value.slice();
-    clist.push(item);
+    clist.unshift(item);
     localStorage.setItem(TODO_KEY, JSON.stringify(clist));
     return clist;
   };
