@@ -79,7 +79,6 @@ export default {
     watch(
       props,
       (newProps) => {
-        console.log("这里看到新值",newProps); //这里看到新值
         createData(newProps.data)
       }
     );

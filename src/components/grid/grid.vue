@@ -20,7 +20,7 @@
   </van-grid>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="Grid">
 import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { key } from "@/store";

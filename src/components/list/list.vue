@@ -11,16 +11,6 @@
           >
             <van-cell @click="toggle(item,index)">
               <template #title>
-                <!-- <van-checkbox
-                  :disabled="item.isFinish"
-                  :name="item.id"
-                  :ref="(el) => (checkboxRefs[index] = el)"
-                  >
-                  {{ item.title }}
-                  <template #icon="item">
-
-                  </template>
-                  </van-checkbox> -->
                 <div class="check-box">
                   <span
                     :class="['checkbox-icon', item.isFinish ? 'is-active' : '']"
@@ -66,17 +56,14 @@
 </template>
 
 <script setup lang="ts">
-import _ from "lodash";
 import { formDataType } from "@/views/createView/use-create";
-import { ref } from "@vue/runtime-core";
 
-const props = defineProps<{
+defineProps<{
   data: formDataType[];
   title: string;
   color: string;
 }>();
 
-const checkboxRefs = ref([]);
 
 const emit = defineEmits<{
   (e: "onToggleFinish", item: formDataType, index: number): void;

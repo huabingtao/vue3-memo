@@ -14,20 +14,16 @@
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { LIST_KEY } from '@/assets/js/constant';
 import AddBtn from '@/components/add-btn/add-btn.vue';
 import Grid from '@/components/grid/grid.vue';
 import SwitchTheme from '@/components/switch-theme/switch-theme.vue';
 import TopSearch from '@/components/top-search/top-search.vue';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex'
 import CreateView from './createView/createView.vue';
 import { TodoStatus } from '@/assets/js/enum'
 import { key } from '@/store';
-
-
 
 export default defineComponent({
   name: 'Home',
@@ -39,7 +35,6 @@ export default defineComponent({
     CreateView
   },
   setup(){
-
     const query = ref("")
     const createRef = ref()
 

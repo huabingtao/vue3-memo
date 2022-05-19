@@ -8,7 +8,6 @@
 </template>
 
 <script>
-// import { ref } from '@vue/reactivity';
 import useSearch from './use-search';
 
 export default {

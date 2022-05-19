@@ -8,10 +8,6 @@
 </template>
 
 <script>
-const themes = {
-	light: "light",
-	dark: 'dark'
-}
 export default {
   data() {
     return {
