@@ -35,7 +35,6 @@ export default {
 @import "@/assets/style/minxin.scss";
 .them {
   text-align: right;
-  padding-right: 10px;
-  padding-top: 10px;
+  margin: 10px 10px 10px 0;
 }
 </style>

@@ -90,6 +90,7 @@ const onClickGirdItem = (status) => {
 .van-grid-item__content {
   padding: 16px 8px;
   @include background_color("color-gird-bg");
+  transition: background-color 0.3s ease;
 }
 .grid-wrap {
   --van-border-color: transparent;

@@ -104,6 +104,7 @@ export default {
 .create {
   height: 100%;
   @include background_color("color-create-bg");
+  transition: background-color 0.3s ease;
   padding: 0 20px;
   .create-field {
     margin-bottom: 1.2rem;
@@ -150,12 +151,14 @@ export default {
   .van-cell-group--inset {
     margin: 0;
     @include background_color("color-create-input-bg");
+    transition: background-color 0.3s ease;
   }
   .van-cell {
     &::after {
       @include border_color("color-create-line");
     }
     @include background_color("color-create-input-bg");
+    transition: background-color 0.3s ease;
   }
 }
 .van-popup {

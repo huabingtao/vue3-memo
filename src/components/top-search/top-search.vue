@@ -36,7 +36,8 @@ export default {
 <style lang="scss">
 @import "@/assets/style/minxin.scss";
 .search{
-  margin-bottom:20px;
+  padding: 0 10px;
+  margin-bottom: 20px;
   .van-field__control{
     @include caret_color("color-caret");
     @include color("color-search-text");
@@ -45,13 +46,17 @@ export default {
     @include color("color-search-icon");
   }
   .van-search{
+    padding: 0;
     @include background_color("color-home-bg");
+    transition: background-color 0.3s ease;
   }
   .van-search__content{
     @include background_color("color-search-bg");
+    transition: background-color 0.3s ease;
   }
   input::-webkit-input-placeholder { /* WebKit browsers 适配谷歌 */
     @include color("color-search-placeholder");
+    transition: background-color 0.3s ease;
   }
 }
 

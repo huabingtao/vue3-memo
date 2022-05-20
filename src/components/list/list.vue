@@ -125,6 +125,7 @@ const deleteMatter = (id) => {
   .van-cell-group,
   .van-cell {
     @include background_color("color-list-bg");
+    /* transition: background-color 0.3s ease; */
   }
   .van-cell-group--inset {
     overflow-y: scroll;
@@ -171,12 +172,15 @@ const deleteMatter = (id) => {
     top: -1px;
     &.btn-detail {
       @include background_color("color-btn-detail");
+      transition: background-color 0.3s ease;
     }
     &.btn-favorite {
       @include background_color("color-btn-favorite");
+      transition: background-color 0.3s ease;
     }
     &.btn-delete {
       @include background_color("color-btn-delete");
+      transition: background-color 0.3s ease;
     }
   }
 }

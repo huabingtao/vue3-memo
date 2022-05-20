@@ -7,7 +7,8 @@ body, html {
     -webkit-tap-highlight-color: transparent;
     min-height: 100vh;
     width: 100%;
-    @include background_color("color-home-bg");     
+    @include background_color("color-home-bg"); 
+    transition: background-color 0.3s ease;
 }
 .icon {
     width: 2rem;

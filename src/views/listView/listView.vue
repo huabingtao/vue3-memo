@@ -221,5 +221,6 @@ const handleDeleteMatter = (id) => {
   width: 100%;
   height: 100%;
   @include background_color("color-list-bg");
+  /* transition: background-color 0.3s ease; */
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <switch-theme></switch-theme>
-    <top-search v-model="query" @submit="submit"></top-search>
+    <!-- <top-search v-model="query" @submit="submit"></top-search> -->
     <grid @onClick="onClickGirdItem"></grid>
     <add-btn :color="'#316af6'" @onClick="openCreateView"></add-btn>
     <create-view ref="createRef"></create-view>

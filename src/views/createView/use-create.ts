@@ -101,7 +101,6 @@ export default function useCreate( hidden: () => void) {
 
   const createMatter = (item: formDataType) => {
     setItemId(item);
-    console.log('item:',item);
     addTodoItem(item);
     store.dispatch("addTodoItem", item);
     clearForm();
