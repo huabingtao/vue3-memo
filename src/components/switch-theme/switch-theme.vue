@@ -36,5 +36,9 @@ export default {
 .them {
   text-align: right;
   margin: 10px 10px 10px 0;
+  .icon{
+        width: 2rem;
+    height: 2rem;
+  }
 }
 </style>

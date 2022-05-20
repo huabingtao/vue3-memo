@@ -100,22 +100,22 @@ const onClickGirdItem = (status) => {
     }
     &:nth-child(1) {
       .grid-icon-content {
-        background: #7163e3;
+        background: #4371ec;
       }
     }
     &:nth-child(2) {
       .grid-icon-content {
-        background: #ff4d4d59;
+        background: #2c922cde;
       }
     }
     &:nth-child(3) {
       .grid-icon-content {
-        background: #b7994085;
+        background: #5d6268;
       }
     }
     &:nth-child(4) {
       .grid-icon-content {
-        background: #ed9a35;
+        background: #e08d48;
       }
     }
   }
