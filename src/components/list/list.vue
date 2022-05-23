@@ -20,7 +20,7 @@
               </template>
               <template #right-icon v-if="item.isFavorite">
                 <svg class="icon svg-icon" aria-hidden="true">
-                  <use xlink:href="#icon-flag"></use>
+                  <use xlink:href="#icon-flag-hui"></use>
                 </svg>
               </template>
             </van-cell>
