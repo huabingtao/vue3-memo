@@ -15,7 +15,7 @@
                   <span
                     :class="['checkbox-icon', item.isFinish ? 'is-active' : '']"
                   ></span>
-                  <span>{{ item.title }}</span>
+                  <span class="checkbox-title">{{ item.title }}</span>
                 </div>
               </template>
               <template #right-icon v-if="item.isFavorite">
@@ -93,8 +93,12 @@ const deleteMatter = (id) => {
 @import "@/assets/style/minxin.scss";
 .list {
   .check-box {
+    flex: 1;
     display: flex;
     align-items: center;
+    min-width: 0;
+    width: 300px;
+    overflow: hidden;
     @include color("color-count");
     .checkbox-icon {
       margin-right: 10px;
@@ -106,9 +110,17 @@ const deleteMatter = (id) => {
       border-radius: 50%;
       display: inline-block;
       box-sizing: border-box;
+      flex: 0 1 20px;
       &.is-active {
         background: #e08d48;
       }
+    }
+    .checkbox-title{
+      flex: 1;
+          overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
     }
   }
   .svg-icon {

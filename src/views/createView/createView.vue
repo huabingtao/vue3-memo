@@ -31,7 +31,7 @@
           <van-cell center title="旗标">
             <template #icon>
               <svg class="icon svg-icon" aria-hidden="true">
-                <use xlink:href="#icon-flag"></use>
+                <use xlink:href="#icon-flag-hui"></use>
               </svg>
             </template>
             <template #right-icon>
