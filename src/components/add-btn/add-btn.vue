@@ -39,6 +39,8 @@ export default defineComponent({
 		width: 32px;
 		height: 32px;
 		margin-right: 0.2rem;
+    display: flex;
+    align-items: center;
 	}
 	.btn-text{
 		flex: 1;
