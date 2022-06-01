@@ -117,12 +117,12 @@ const calcuListData = () => {
       break;
     case TodoStatus.Finish:
       title = "已完成";
-      color = "#767676";
+      color = "#2c922cde";
       listData = computed(() => store.state.finishlist);
       break;
     case TodoStatus.All:
       title = "全部";
-      color = "#51565e";
+      color = "#5d6268";
       listData.value = [
         ...computed(() => store.state.todolist).value,
         ...computed(() => store.state.finishlist).value,
@@ -130,7 +130,7 @@ const calcuListData = () => {
       break;
     default:
       title = "旗标";
-      color = "#e99f2f";
+      color = "#ea8f2f";
       const todolist = computed(() => store.state.todolist);
       const finishlist = computed(() => store.state.finishlist);
       const clist = [...todolist.value, ...finishlist.value];

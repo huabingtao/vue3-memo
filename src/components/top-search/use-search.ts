@@ -8,7 +8,6 @@ export default function useSearch (props:any,emit:any){
 		emit('update:modelValue', newValue)
 	})
 
-
 	return {
 		query
 	}
